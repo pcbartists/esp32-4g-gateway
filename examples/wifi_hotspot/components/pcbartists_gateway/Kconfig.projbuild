@@ -1,0 +1,125 @@
+menu "PCB Artists Gateway Configuration"
+
+    choice GATEWAY_DEVICE
+        prompt "Choose your Gateway Device"
+        default  GATEWAY_DEVICE_GEN1
+        config GATEWAY_DEVICE_LORA_ULP_GEN1
+            bool "Ultra-Low Power 4G Gateway + LoRa, Gen.1"
+            help
+                "LiPo based low power gateway that includes LoRa"
+        config GATEWAY_DEVICE_GEN1
+            bool "4G Gateway with Ethernet and RS-485, Gen.1"
+            help
+                "Gateway with cellular, ethernet and RS485, Gen.1"
+    endchoice
+
+    choice GATEWAY_MODEM_DEVICE
+        prompt "Choose supported modem device (DCE)"
+        default GATEWAY_MODEM_DEVICE_SIM7600
+        help
+            Select modem device connected to the ESP DTE.
+        config GATEWAY_MODEM_DEVICE_SIM7000
+            bool "SIM7000"
+            help
+                SIM7000 is a Multi-Band LTE-FDD and GSM/GPRS/EDGE module.
+        config GATEWAY_MODEM_DEVICE_SIM7070
+            bool "SIM7070"
+            help
+                SIM7070 is Multi-Band CAT M and NB IoT module.
+        config GATEWAY_MODEM_DEVICE_SIM7600
+            bool "SIM7600"
+            help
+                SIM7600 is a Multi-Band LTE-TDD/LTE-FDD/HSPA+ and GSM/GPRS/EDGE module.
+    endchoice
+
+    config GATEWAY_MODEM_PPP_APN
+        string "Set MODEM APN"
+        default "www"
+        help
+            Set APN (Access Point Name), a logical name to choose data network
+
+    config GATEWAY_MODEM_PPP_AUTH_NONE
+        bool "Skip PPP authentication"
+        default n
+        help
+            Set to true for the PPP client to skip authentication
+
+    config GATEWAY_MODEM_PPP_AUTH_USERNAME
+        string "Set username for authentication"
+        default ""
+        depends on !GATEWAY_MODEM_PPP_AUTH_NONE
+        help
+            Set username for PPP Authentication.
+
+    config GATEWAY_MODEM_PPP_AUTH_PASSWORD
+        string "Set password for authentication"
+        default ""
+        depends on !GATEWAY_MODEM_PPP_AUTH_NONE
+        help
+            Set password for PPP Authentication.
+
+    config GATEWAY_NEED_SIM_PIN
+        bool "SIM PIN needed"
+        default n
+        help
+            Enable to set SIM PIN before starting the example
+
+    config GATEWAY_SIM_PIN
+        string "Set SIM PIN"
+        default "1234"
+        depends on GATEWAY_NEED_SIM_PIN
+        help
+            Pin to unlock the SIM
+
+    menu "UART Configuration"
+        config GATEWAY_MODEM_UART_NUM
+            int "UART peripheral for modem communication"
+            range 1 2
+            default 1
+            help
+                Select UART_NUM_x for modem interface
+
+        config GATEWAY_MODEM_UART_EVENT_TASK_STACK_SIZE
+            int "UART Event Task Stack Size"
+            range 2000 6000
+            default 4096
+            help
+                Stack size of UART event task.
+
+        config GATEWAY_MODEM_UART_EVENT_TASK_PRIORITY
+            int "UART Event Task Priority"
+            range 3 22
+            default 5
+            help
+                Priority of UART event task.
+
+        config GATEWAY_MODEM_UART_EVENT_QUEUE_SIZE
+            int "UART Event Queue Size"
+            range 10 40
+            default 30
+            help
+                Length of UART event queue.
+
+        config GATEWAY_MODEM_UART_PATTERN_QUEUE_SIZE
+            int "UART Pattern Queue Size"
+            range 10 40
+            default 20
+            help
+                Length of UART pattern queue.
+
+        config GATEWAY_MODEM_UART_TX_BUFFER_SIZE
+            int "UART TX Buffer Size"
+            range 256 16384
+            default 4096
+            help
+                Buffer size of UART TX buffer. Recommended 2048 for NAT applications.
+
+        config GATEWAY_MODEM_UART_RX_BUFFER_SIZE
+            int "UART RX Buffer Size"
+            range 256 16384
+            default 8192
+            help
+                Buffer size of UART RX buffer. Recommended 16384 for NAT applications.
+
+    endmenu
+endmenu

@@ -1,0 +1,6 @@
+dependencies:
+  idf:
+    version: '>=4.1'
+description: esp modem
+url: https://github.com/espressif/esp-protocols/tree/master/components/esp_modem
+version: 0.1.26
